@@ -27,10 +27,21 @@ contract UniversityDegree is ERC721URIStorage{
         issuedDegrees[to]=true;
     }
 
+    mapping(address => string) public personToDegree;
+
     function claimDegree(string memory tokenURI) public returns(uint256){
         require(issuedDegrees[msg.sender],"Degree is not issued");
-        
-    }
-  }
 
+        _tokenIds.increment();
+        uint256 newItemId=_tokenIds.current();
+        _mint(msg.sender,newItemId);
+        _setTokenURI(newItemId, tokenURI);
+
+        personToDegree[msg.sender]=tokenURI;
+        issuedDegrees[msg.sender]= false;
+
+        return newItemId;
+    }
+
+  }
 
